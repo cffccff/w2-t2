@@ -38,13 +38,29 @@ public class CubeScript : MonoBehaviour
     void rotate_gameobject()
     {
         transform.LookAt(targetPoint);
-      
+
     }
     void Update()
     {
         move_gameobject();
         rotate_gameobject();
     }
-    
+    void OnDrawGizmos()
+    {
 
+        Gizmos.color = Color.red;
+        for (int i = 1; i <= 4; i++)
+        {
+            if (i == 4)
+            {
+                Gizmos.DrawLine(GameObject.Find("Point_" + i.ToString()).transform.position, GameObject.Find("Point_" + 1).transform.position);
+            }
+            else
+            {
+                Gizmos.DrawLine(GameObject.Find("Point_" + i.ToString()).transform.position, GameObject.Find("Point_" + (i + 1).ToString()).transform.position);
+            }
+
+        }
+
+    }
 }
