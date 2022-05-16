@@ -35,9 +35,15 @@ public class CubeScript : MonoBehaviour
             targetPoint = GameObject.Find(point_position).transform.position;
         }
     }
+    void rotate_gameobject()
+    {
+        transform.LookAt(targetPoint);
+      
+    }
     void Update()
     {
         move_gameobject();
+        rotate_gameobject();
     }
     
 
