@@ -1,66 +1,71 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class CubeScript : MonoBehaviour
 {
-    Vector3 targetPoint;
-
-    int index_point = 1;
-    string point = "Point_";
-    string point_position;
+    Vector3 wayPoint_Position;
+    public GameObject[] objects ;
+    int wayPoint_index;
+   
+  
     // Start is called before the first frame update
     void Start()
     {
-        targetPoint = GameObject.Find("Point_1").transform.position;
+        InitialObjects();
 
 
+
+    }
+   void InitialObjects()
+    {
+        objects = GameObject.FindGameObjectsWithTag("WayPoint");
+        wayPoint_Position = objects[0].transform.position;
+        wayPoint_index = 0;
     }
     void move_gameobject()
     {
-        float step = 4 * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, targetPoint, step);
-        if (Vector3.Distance(transform.position, targetPoint) < 0.001f)
-        {
-            if (index_point == 4)
-            {
-                index_point = 1;
-            }
-            else
-            {
-                index_point++;
-            }
 
-            point_position = point + index_point.ToString();
-            targetPoint = GameObject.Find(point_position).transform.position;
+        objects = GameObject.FindGameObjectsWithTag("WayPoint");
+        if (objects[wayPoint_index] != null)
+        {
+            wayPoint_Position = objects[wayPoint_index].transform.position;
+            float step = 7 * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, wayPoint_Position, step);
+            if (Vector3.Distance(transform.position, wayPoint_Position) < 0.001f)
+            {
+                if (wayPoint_index == objects.Length - 1) wayPoint_index = 0;
+                else wayPoint_index++;
+            }
         }
+        else
+        {
+            InitialObjects();
+        }
+
+      
+
+
     }
     void rotate_gameobject()
     {
-        transform.LookAt(targetPoint);
+        transform.LookAt(wayPoint_Position);
 
     }
     void Update()
     {
         move_gameobject();
         rotate_gameobject();
+    
     }
-    void OnDrawGizmos()
-    {
+    
 
-        Gizmos.color = Color.red;
-        for (int i = 1; i <= 4; i++)
-        {
-            if (i == 4)
-            {
-                Gizmos.DrawLine(GameObject.Find("Point_" + i.ToString()).transform.position, GameObject.Find("Point_" + 1).transform.position);
-            }
-            else
-            {
-                Gizmos.DrawLine(GameObject.Find("Point_" + i.ToString()).transform.position, GameObject.Find("Point_" + (i + 1).ToString()).transform.position);
-            }
+    
 
-        }
 
-    }
+
+
+
+    
 }
